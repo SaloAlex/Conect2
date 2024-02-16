@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'https://master--conect2.netlify.app'
+  origin: 'https://master--conect2.netlify.app/user-profile'
 }));
 
 app.use(bodyParser.json());
