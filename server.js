@@ -12,11 +12,15 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'https://master--conect2.netlify.app/user-profile'
+  origin: 'https://master--conect2.netlify.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
 }));
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'build')));
+
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
 app.get('/riot/account/v1/accounts/by-riot-id', async (req, res) => {
@@ -63,7 +67,7 @@ app.post('/send-email', async (req, res) => {
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:5173', // Permitir solicitudes desde tu aplicación React
+        'Access-Control-Allow-Origin': 'https://master--conect2.netlify.app/', // Permitir solicitudes desde tu aplicación React
       },
       body: JSON.stringify(emailData),
     });
