@@ -25,14 +25,14 @@ const Riot = () => {
     try {
       // Endpoint 1: Buscar por gameName y tagLine
       const riotAccountEndpoint =
-        "http://localhost:3001/riot/account/v1/accounts/by-riot-id";
+        "http://conect2.netlify.app/riot/account/v1/accounts/by-riot-id";
         const riotAccountResponse = await axios.get(riotAccountEndpoint, {
           params: { gameName, tagLine },
         });
 
       // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
       const summonerEndpoint =
-        "http://localhost:3001/lol/summoner/v4/summoners/by-name";
+        "http://conect2.netlify.app/lol/summoner/v4/summoners/by-name";
       const summonerResponse = await axios.get(summonerEndpoint, {
         params: { summonerName: gameName },
       });
