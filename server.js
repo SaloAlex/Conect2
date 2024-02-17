@@ -7,6 +7,8 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 
+dotenv.config();
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Leer las variables de entorno
@@ -16,9 +18,7 @@ const resendApiKey = process.env.RESEND_API_KEY;
 const riotApiUrl = 'https://americas.api.riotgames.com';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-
-dotenv.config();
+const PORT = process.env.PORT || 3000;
 
 
 const transporter = nodemailer.createTransport({
@@ -36,6 +36,12 @@ app.use(cors({
   credentials: true, // Permitir el envío de cookies
   optionsSuccessStatus: 204, // Código de estado para las solicitudes preflight
 }));
+
+// Manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'build')));
@@ -81,7 +87,6 @@ app.get("/user-profile/lol/summoner/v4/summoners/by-name", async (req, res) => {
 });
 
 
-// Modificar la ruta actual para aceptar solicitudes CORS
 app.post('/send-email', async (req, res) => {
   try {
     const emailData = req.body;
@@ -95,7 +100,8 @@ app.post('/send-email', async (req, res) => {
     const info = await transporter.sendMail(mailOptions);
     res.json(info);
   } catch (error) {
-    handleError(error, res);
+    console.error("Error sending email:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
