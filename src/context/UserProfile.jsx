@@ -32,7 +32,7 @@ const UserProfile = () => {
       <div className="header col-span-2 row-span-1">
         {/* Logo */}
         <div className="flex items-center mb-4">
-          <Link to="" className="block">
+          <Link to="/" className="block">
             <img className="h-20 w-auto mr-2" src={Logo} alt="Logo" />
           </Link>
         </div>
