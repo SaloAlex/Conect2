@@ -1,5 +1,5 @@
-[ [redirects]]
-  from = "/user-profile/*"
+[redirects]
+  from = "https://conect2.netlify.app/user-profile/*"
   to = ":splat"
   status = 200
   force = true
