@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import LogoLol from "../assets/lol.png";
+import LogoLol from "../assets/lol.png"
+
 
 const Riot = () => {
   const [gameName, setGameName] = useState("");
@@ -11,10 +12,6 @@ const Riot = () => {
 
   const handleGameNameChange = (event) => {
     setGameName(event.target.value);
-  };
-  const handleDisconnect = () => {
-    // Agrega lógica para desconectar aquí si es necesario
-    setPlayerData(null);
   };
 
   const handleTagLineChange = (event) => {
@@ -27,17 +24,15 @@ const Riot = () => {
 
     try {
       // Endpoint 1: Buscar por gameName y tagLine
-      // Cambiar la URL para que apunte a tu servidor de Express
       const riotAccountEndpoint =
-        "https://conect2.netlify.app/user-profile/riot/account/v1/accounts/by-riot-id";
-      const riotAccountResponse = await axios.get(riotAccountEndpoint, {
-        params: { gameName, tagLine },
-      });
+        "http://localhost:3001/riot/account/v1/accounts/by-riot-id";
+        const riotAccountResponse = await axios.get(riotAccountEndpoint, {
+          params: { gameName, tagLine },
+        });
 
       // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
-      // Cambiar la URL para que apunte a tu servidor de Express
       const summonerEndpoint =
-        "https://conect2.netlify.app/user-profile/lol/summoner/v4/summoners/by-name";
+        "http://localhost:3001/lol/summoner/v4/summoners/by-name";
       const summonerResponse = await axios.get(summonerEndpoint, {
         params: { summonerName: gameName },
       });
@@ -56,15 +51,14 @@ const Riot = () => {
     } finally {
       setLoading(false);
     }
-    // El resto del código de tu componente
   };
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl mb-4 flex text-center">
-        Connect
+        Connect 
         <img
-          src={LogoLol} // Reemplaza con la ruta correcta de tu imagen
+          src={LogoLol}// Reemplaza con la ruta correcta de tu imagen
           alt="Riot Logo"
           className="ml-2 h-10 w-10" // Puedes ajustar las clases según tus necesidades
         />
@@ -72,7 +66,7 @@ const Riot = () => {
 
       <div className="mb-4">
         <label htmlFor="gameName" className="block text-gray-700">
-          Enter Your Game Name:
+          Enter Game Name:
         </label>
         <input
           type="text"
@@ -98,7 +92,7 @@ const Riot = () => {
         onClick={handleSearch}
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
       >
-        {loading ? "Searching..." : "Connect"}
+        {loading ? "Searching..." : "Connect" }
       </button>
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {playerData && (
@@ -109,22 +103,12 @@ const Riot = () => {
               src={`https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon${playerData.summoner.profileIconId}.jpg?image=q_auto,f_webp,w_auto&v=1707283412529`}
               alt="profile image"
               className="max-w-24 h-auto rounded-full"
-              onError={(e) => {
-                e.target.src = "imagen_por_defecto.jpg"; // Ruta a la imagen por defecto
-              }}
             />
           )}
 
           <h3 className="text-lg font-semibold">Summoner:</h3>
           <p>Name: {playerData.summoner.name}</p>
           <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
-          {/* Botón de desconexión */}
-          <button
-            onClick={handleDisconnect}
-            className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
-          >
-            Disconnect
-          </button>
         </div>
       )}
     </div>
