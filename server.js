@@ -18,7 +18,7 @@ const resendApiKey = process.env.RESEND_API_KEY;
 const riotApiUrl = 'https://americas.api.riotgames.com';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 
 const transporter = nodemailer.createTransport({
