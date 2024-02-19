@@ -12,12 +12,11 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Configuración CORS
-app.use(cors({
-  origin: 'https://conect2.netlify.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-}));
+app.use(
+  cors({
+    origin: "*", // Permitir el acceso desde cualquier origen
+  })
+);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
