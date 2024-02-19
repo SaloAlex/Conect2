@@ -3,6 +3,7 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import path from "path";
 import axios from "axios";
+import { Resend } from 'resend';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,18 +50,27 @@ app.get("/api/lol/summoner/v4/summoners/by-name", async (req, res) => {
   }
 });
 
+// Ruta para manejar la solicitud de envío de correos electrónicos
 app.post("/send-email", async (req, res) => {
   try {
     const emailData = req.body;
-    const mailOptions = {
-      from: "tu_correo@gmail.com",
-      to: emailData.to,
-      subject: emailData.subject,
-      text: emailData.text,
-    };
 
-    const info = await transporter.sendMail(mailOptions);
-    res.json(info);
+    const resend = new Resend('re_T7JQmD32_HPEpvv6hLf5AUM3BPJ1hdwUb');
+
+    const { data, error } = await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',
+      to: [emailData.to],
+      subject: emailData.subject,
+      html: emailData.text,
+    });
+
+    if (error) {
+      console.error("Error sending email:", error);
+      return res.status(500).json({ error: "Error sending email. Please try again." });
+    }
+
+    // Puedes ajustar el objeto de respuesta según lo que quieras incluir
+    res.json({ message: "Email sent successfully", data });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ error: "Internal Server Error" });
