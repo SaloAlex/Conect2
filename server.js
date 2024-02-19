@@ -14,7 +14,10 @@ const PORT = process.env.PORT || 3001;
 // Configuración CORS
 app.use(
   cors({
-    origin: "*", // Permitir el acceso desde cualquier origen
+    origin: 'https://conect2.netlify.app',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 
