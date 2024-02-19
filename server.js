@@ -11,17 +11,19 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(
-  cors({
-    origin: 'https://conect2.netlify.app',
-  })
-);
+// Configuración CORS
+app.use(cors({
+  origin: 'https://conect2.netlify.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+}));
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
 
 
-// Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
+
 // Rutas para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
 app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
