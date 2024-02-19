@@ -17,7 +17,9 @@ app.use(
   })
 );
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
+
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
 // Rutas para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
