@@ -48,7 +48,7 @@ app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
       )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
     );
 
-    if (response.headers["content-type"] === "application/json") {
+    if (response.headers['content-type'] === 'application/json') {
       // Si el tipo de contenido es JSON, procesar como tal
       console.log("Riot Account Response:", response.data);
       res.json(response.data);
