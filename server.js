@@ -32,13 +32,18 @@ app.use("/api", (req, res, next) => {
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
+  res.status(500).json({ error: "Algo salió mal" });
 });
 
+// Función común para procesar la respuesta JSON
+const processJsonResponse = (res, response) => {
+  console.log("Riot Account Response:", response.data);
+  res.json(response.data);
+};
+
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
-app.get("/.netlify/functions/riot/account/v1/accounts/by-riot-id", async (req, res) => {
+app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
-    // Obtener parámetros de la URL
     const { gameName, tagLine } = req.query;
     const apiKey = "RGAPI-81881bf4-9928-433b-a9a3-dc8e0eef3b62";
 
@@ -48,16 +53,7 @@ app.get("/.netlify/functions/riot/account/v1/accounts/by-riot-id", async (req, r
       )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
     );
 
-    // Verificar si el tipo de contenido es JSON
-    if (response.headers['content-type'].includes('application/json')) {
-      // Si es JSON, procesar como tal
-      console.log("Riot Account Response:", response.data);
-      res.json(response.data);
-    } else {
-      // Si no es JSON, manejar el error
-      console.error("Error: API returned HTML instead of JSON");
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+    processJsonResponse(res, response);
   } catch (error) {
     console.error("Error fetching player data:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -65,28 +61,18 @@ app.get("/.netlify/functions/riot/account/v1/accounts/by-riot-id", async (req, r
 });
 
 // Ruta para manejar la solicitud de búsqueda de jugadores por summonerName
-app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
+app.get("/api/lol/summoner/v4/summoners/by-name", async (req, res) => {
   try {
-    // Obtener parámetros de la URL
-    const { gameName, tagLine } = req.query;
+    const { summonerName } = req.query;
     const apiKey = "RGAPI-81881bf4-9928-433b-a9a3-dc8e0eef3b62";
 
     const response = await axios.get(
-      `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
-        gameName
-      )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
+      `https://la2.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
+        summonerName
+      )}?api_key=${apiKey}`
     );
 
-    // Verificar si el tipo de contenido es JSON
-    if (response.headers['content-type'].includes('application/json')) {
-      // Si es JSON, procesar como tal
-      console.log("Riot Account Response:", response.data);
-      res.json(response.data);
-    } else {
-      // Si no es JSON, manejar el error
-      console.error("Error: API returned HTML instead of JSON");
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+    processJsonResponse(res, response);
   } catch (error) {
     console.error("Error fetching player data:", error);
     res.status(500).json({ error: "Internal Server Error" });
