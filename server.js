@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
-app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
+app.get("/.netlify/functions/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
     // Obtener parámetros de la URL
     const { gameName, tagLine } = req.query;
@@ -48,12 +48,13 @@ app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
       )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
     );
 
-    if (response.headers['content-type'] === 'application/json') {
-      // Si el tipo de contenido es JSON, procesar como tal
+    // Verificar si el tipo de contenido es JSON
+    if (response.headers['content-type'].includes('application/json')) {
+      // Si es JSON, procesar como tal
       console.log("Riot Account Response:", response.data);
       res.json(response.data);
     } else {
-      // Si el tipo de contenido no es JSON, manejar el error
+      // Si no es JSON, manejar el error
       console.error("Error: API returned HTML instead of JSON");
       res.status(500).json({ error: "Internal Server Error" });
     }
