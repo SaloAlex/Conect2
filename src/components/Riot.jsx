@@ -20,34 +20,28 @@ const Riot = () => {
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-  
+
     try {
-      // Endpoint 1: Buscar por gameName y tagLine
       const riotAccountEndpoint =
         "https://conect2.netlify.app/riot/account/v1/accounts/by-riot-id";
       const riotAccountResponse = await axios.get(riotAccountEndpoint, {
         params: { gameName, tagLine },
       });
       console.log("Riot Account Response:", riotAccountResponse.data);
-  
-      // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
+
       const summonerEndpoint =
         "https://conect2.netlify.app/lol/summoner/v4/summoners/by-name";
       const summonerResponse = await axios.get(summonerEndpoint, {
         params: { summonerName: gameName },
       });
       console.log("Summoner Response:", summonerResponse.data);
-  
-      // Actualizar el estado con los datos de ambos endpoints
+
       setPlayerData({
         riotAccount: riotAccountResponse.data,
         summoner: summonerResponse.data,
       });
     } catch (error) {
-      console.error(
-        "Error searching player:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error searching player:", error);
       setError(`Error searching player. ${error.message}`);
     } finally {
       setLoading(false);
