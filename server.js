@@ -18,6 +18,12 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "build")));
 
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
+
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
 app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
