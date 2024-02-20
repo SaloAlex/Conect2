@@ -17,7 +17,19 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
+
+// Middleware para manejar solo solicitudes de API
+app.use("/api", (req, res, next) => {
+  // Configuración de cors para permitir acceso desde cualquier origen
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  next();
+});
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
@@ -26,7 +38,7 @@ app.use((err, req, res, next) => {
 });
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
-app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
+app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
     // Obtener parámetros de la URL
     const { gameName, tagLine } = req.query;
@@ -49,8 +61,9 @@ app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   }
 });
 
+
 // Ruta para manejar la solicitud de búsqueda de jugadores por summonerName
-app.get("/lol/summoner/v4/summoners/by-name", async (req, res) => {
+app.get("/api/lol/summoner/v4/summoners/by-name", async (req, res) => {
   try {
     const { summonerName } = req.query;
     const apiKey = "RGAPI-81881bf4-9928-433b-a9a3-dc8e0eef3b62";
@@ -64,6 +77,14 @@ app.get("/lol/summoner/v4/summoners/by-name", async (req, res) => {
     console.error("Error fetching summoner data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+// Rutas para manejar solicitudes de React
+app.use(express.static(path.join(__dirname, "public")));
+
+// Manejar todas las demás solicitudes de React
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.post("/send-email", async (req, res) => {
