@@ -58,9 +58,9 @@ const Riot = () => {
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl mb-4 flex text-center">
-        Connect
+        Connect 
         <img
-          src={LogoLol} // Reemplaza con la ruta correcta de tu imagen
+          src={LogoLol}// Reemplaza con la ruta correcta de tu imagen
           alt="Riot Logo"
           className="ml-2 h-10 w-10" // Puedes ajustar las clases según tus necesidades
         />
@@ -94,13 +94,13 @@ const Riot = () => {
         onClick={handleSearch}
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
       >
-        {loading ? "Searching..." : "Connect"}
+        {loading ? "Searching..." : "Connect" }
       </button>
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {playerData && (
         <div className="mt-4">
           {/* Utilizamos el profileIconId directamente desde la respuesta del segundo endpoint */}
-          {playerData.summoner && playerData.summoner.profileIconId && (
+          {playerData.summoner.profileIconId && (
             <img
               src={`https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon${playerData.summoner.profileIconId}.jpg?image=q_auto,f_webp,w_auto&v=1707283412529`}
               alt="profile image"
@@ -109,21 +109,8 @@ const Riot = () => {
           )}
 
           <h3 className="text-lg font-semibold">Summoner:</h3>
-          {playerData.summoner && (
-            <>
-              <p>Name: {playerData.summoner.name}</p>
-              <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
-            </>
-          )}
-
-          {/* Si tienes datos en riotAccount, también puedes mostrarlos aquí */}
-          {playerData.riotAccount && (
-            <>
-              <h3 className="text-lg font-semibold">Riot Account:</h3>
-              <p>Game Name: {playerData.riotAccount.gameName}</p>
-              <p>Tag Line: {playerData.riotAccount.tagLine}</p>
-            </>
-          )}
+          <p>Name: {playerData.summoner.name}</p>
+          <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
         </div>
       )}
     </div>
