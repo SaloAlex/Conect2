@@ -97,21 +97,34 @@ const Riot = () => {
       </button>
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {playerData && (
-        <div className="mt-4">
-          {/* Utilizamos el profileIconId directamente desde la respuesta del segundo endpoint */}
-          {playerData.summoner.profileIconId && (
-            <img
-              src={`https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon${playerData.summoner.profileIconId}.jpg?image=q_auto,f_webp,w_auto&v=1707283412529`}
-              alt="profile image"
-              className="max-w-24 h-auto rounded-full"
-            />
-          )}
+  <div className="mt-4">
+    {/* Utilizamos el profileIconId directamente desde la respuesta del segundo endpoint */}
+    {playerData.summoner && playerData.summoner.profileIconId && (
+      <img
+        src={`https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon${playerData.summoner.profileIconId}.jpg?image=q_auto,f_webp,w_auto&v=1707283412529`}
+        alt="profile image"
+        className="max-w-24 h-auto rounded-full"
+      />
+    )}
 
-          <h3 className="text-lg font-semibold">Summoner:</h3>
-          <p>Name: {playerData.summoner.name}</p>
-          <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
-        </div>
-      )}
+    <h3 className="text-lg font-semibold">Summoner:</h3>
+    {playerData.summoner && (
+      <>
+        <p>Name: {playerData.summoner.name}</p>
+        <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
+      </>
+    )}
+
+    {/* Si tienes datos en riotAccount, también puedes mostrarlos aquí */}
+    {playerData.riotAccount && (
+      <>
+        <h3 className="text-lg font-semibold">Riot Account:</h3>
+        <p>Game Name: {playerData.riotAccount.gameName}</p>
+        <p>Tag Line: {playerData.riotAccount.tagLine}</p>
+      </>
+    )}
+  </div>
+)}
     </div>
   );
 };
