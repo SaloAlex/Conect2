@@ -42,10 +42,8 @@ const Riot = () => {
         summoner: summonerResponse.data,
       });
     } catch (error) {
-      console.error(
-        "Error searching player:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error searching player:", error);
+      console.error("Response:", error.response);
       setError("Error searching player. Please try again.");
     } finally {
       setLoading(false);
@@ -84,7 +82,8 @@ const Riot = () => {
           id="tagLine"
           value={tagLine}
           onChange={handleTagLineChange}
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600 ${loading ? 'cursor-wait' : ''}`}
+
         />
       </div>
       <button
