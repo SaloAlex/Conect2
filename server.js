@@ -17,8 +17,6 @@ app.use(
   })
 );
 
-// app.use(express.static(path.join(__dirname, "public")));
-
 // Middleware para manejar solo solicitudes de API
 app.use("/api", (req, res, next) => {
   // Configuración de cors para permitir acceso desde cualquier origen
@@ -42,25 +40,28 @@ app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
     // Obtener parámetros de la URL
     const { gameName, tagLine } = req.query;
-
-    // Reemplazar 'TU_CLAVE_DE_API' con tu propia clave de desarrollador de Riot Games
     const apiKey = "RGAPI-81881bf4-9928-433b-a9a3-dc8e0eef3b62";
 
-    // Hacer una solicitud real a la API de Riot Games con la clave de desarrollador
     const response = await axios.get(
       `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
         gameName
       )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
     );
 
-    // Devolver la respuesta de la API de Riot Games
-    res.json(response.data);
+    if (response.headers["content-type"] === "application/json") {
+      // Si el tipo de contenido es JSON, procesar como tal
+      console.log("Riot Account Response:", response.data);
+      res.json(response.data);
+    } else {
+      // Si el tipo de contenido no es JSON, manejar el error
+      console.error("Error: API returned HTML instead of JSON");
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   } catch (error) {
     console.error("Error fetching player data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 // Ruta para manejar la solicitud de búsqueda de jugadores por summonerName
 app.get("/api/lol/summoner/v4/summoners/by-name", async (req, res) => {
@@ -109,4 +110,3 @@ app.post("/send-email", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
