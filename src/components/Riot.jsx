@@ -20,7 +20,7 @@ const Riot = () => {
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-
+  
     try {
       // Endpoint 1: Buscar por gameName y tagLine
       const riotAccountEndpoint =
@@ -29,7 +29,7 @@ const Riot = () => {
         params: { gameName, tagLine },
       });
       console.log("Riot Account Response:", riotAccountResponse.data);
-
+  
       // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
       const summonerEndpoint =
         "https://conect2.netlify.app/lol/summoner/v4/summoners/by-name";
@@ -37,7 +37,7 @@ const Riot = () => {
         params: { summonerName: gameName },
       });
       console.log("Summoner Response:", summonerResponse.data);
-
+  
       // Actualizar el estado con los datos de ambos endpoints
       setPlayerData({
         riotAccount: riotAccountResponse.data,
@@ -53,6 +53,7 @@ const Riot = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
