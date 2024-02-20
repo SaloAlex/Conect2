@@ -10,13 +10,14 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Configuración de middleware
 app.use(
   cors({
     origin: "https://conect2.netlify.app",
   })
 );
 
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
