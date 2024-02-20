@@ -36,7 +36,7 @@ app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    console.error("Error fetching player data:", error);
+    console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -51,7 +51,7 @@ app.get("/api/lol/summoner/v4/summoners/by-name", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    console.error("Error fetching summoner data:", error);
+    console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -78,7 +78,7 @@ app.post("/send-email", async (req, res) => {
     // Puedes ajustar el objeto de respuesta según lo que quieras incluir
     res.json({ message: "Email sent successfully", data });
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
