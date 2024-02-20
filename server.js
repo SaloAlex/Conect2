@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
-app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
+app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
     // Obtener parámetros de la URL
     const { gameName, tagLine } = req.query;
@@ -64,44 +64,30 @@ app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
 });
 
 // Ruta para manejar la solicitud de búsqueda de jugadores por summonerName
-app.get("/api/lol/summoner/v4/summoners/by-name", async (req, res) => {
+app.get("/api/riot/account/v1/accounts/by-riot-id", async (req, res) => {
   try {
-    const { summonerName } = req.query;
+    // Obtener parámetros de la URL
+    const { gameName, tagLine } = req.query;
     const apiKey = "RGAPI-81881bf4-9928-433b-a9a3-dc8e0eef3b62";
+
     const response = await axios.get(
-      `https://la2.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
-        summonerName
-      )}?api_key=${apiKey}`
+      `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
+        gameName
+      )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
     );
-    res.json(response.data);
+
+    // Verificar si el tipo de contenido es JSON
+    if (response.headers['content-type'].includes('application/json')) {
+      // Si es JSON, procesar como tal
+      console.log("Riot Account Response:", response.data);
+      res.json(response.data);
+    } else {
+      // Si no es JSON, manejar el error
+      console.error("Error: API returned HTML instead of JSON");
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   } catch (error) {
-    console.error("Error fetching summoner data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-// Rutas para manejar solicitudes de React
-app.use(express.static(path.join(__dirname, "public")));
-
-// Manejar todas las demás solicitudes de React
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-app.post("/send-email", async (req, res) => {
-  try {
-    const emailData = req.body;
-    const mailOptions = {
-      from: "tu_correo@gmail.com",
-      to: emailData.to,
-      subject: emailData.subject,
-      text: emailData.text,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    res.json(info);
-  } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error fetching player data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
