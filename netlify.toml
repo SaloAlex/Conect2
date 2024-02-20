@@ -3,9 +3,9 @@
   to = "https://conect2.netlify.app/:splat"
   status = 200
   force = true
-  headers = { Access-Control-Allow-Origin = "https://conect2.netlify.app" }
+  headers = { Access-Control-Allow-Origin = "https://conect2.netlify.app/user-profile" }
 
 [[headers]]
   for = "/*"
     [headers.values]
-      Access-Control-Allow-Origin = "https://conect2.netlify.app"
+      Access-Control-Allow-Origin = "https://conect2.netlify.app/user-profile"
