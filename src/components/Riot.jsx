@@ -1,6 +1,8 @@
+
 import React, { useState } from "react";
 import axios from "axios";
-import LogoLol from "../assets/lol.png";
+import LogoLol from "../assets/lol.png"
+
 
 const Riot = () => {
   const [gameName, setGameName] = useState("");
@@ -20,51 +22,51 @@ const Riot = () => {
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-  
+
     try {
       // Endpoint 1: Buscar por gameName y tagLine
       const riotAccountEndpoint =
-        "https://conect2.netlify.app/riot/account/v1/accounts/by-riot-id";
+        "http://localhost:3001/riot/account/v1/accounts/by-riot-id";
       const riotAccountResponse = await axios.get(riotAccountEndpoint, {
         params: { gameName, tagLine },
       });
-  
-      // Verificar si la respuesta es HTML
-      if (riotAccountResponse.headers['content-type'].includes('text/html')) {
-        console.error("Error: la API devolvió HTML en lugar de JSON");
-        throw new Error("Error interno del servidor");
-      }
-  
-      console.log("Riot Account Response:", riotAccountResponse.data);
-  
+
       // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
       const summonerEndpoint =
-        "https://conect2.netlify.app/lol/summoner/v4/summoners/by-name";
+        "http://localhost:3001/lol/summoner/v4/summoners/by-name";
       const summonerResponse = await axios.get(summonerEndpoint, {
         params: { summonerName: gameName },
       });
-      console.log("Summoner Response:", summonerResponse.data);
-  
-      // Actualizar el estado con los datos de ambos endpoints
+
+      // Endpoint 3: Buscar por encryptedSummonerId (usando el summonerId del segundo endpoint)
+      const leagueEndpoint =
+        `http://localhost:3001/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
+      const leagueResponse = await axios.get(leagueEndpoint);
+
+
+      // Actualizar el estado con los datos de los tres endpoints
       setPlayerData({
         riotAccount: riotAccountResponse.data,
         summoner: summonerResponse.data,
+        league: leagueResponse.data,
       });
     } catch (error) {
-      console.error("Error al buscar jugador:", error.message);
-      setError(`Error al buscar jugador. ${error.message}`);
+      console.error(
+        "Error searching player:",
+        error.response ? error.response.data : error.message
+      );
+      setError("Error searching player. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl mb-4 flex text-center">
         Connect 
         <img
-          src={LogoLol}// Reemplaza con la ruta correcta de tu imagen
+          src={LogoLol} // Reemplaza con la ruta correcta de tu imagen
           alt="Riot Logo"
           className="ml-2 h-10 w-10" // Puedes ajustar las clases según tus necesidades
         />
@@ -115,6 +117,24 @@ const Riot = () => {
           <h3 className="text-lg font-semibold">Summoner:</h3>
           <p>Name: {playerData.summoner.name}</p>
           <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
+
+          {/* Información de la liga */}
+          <h3 className="text-lg font-semibold">League:</h3>
+          <p>Queue Type: {playerData.league[0].queueType}</p>
+          <p>
+            Tier: {playerData.league[0].tier}
+            {playerData.league[0].tier && (
+              <img
+                src={`https://opgg-static.akamaized.net/images/medals_new/${playerData.league[0].tier.toLowerCase()}.png?image=q_auto,f_webp,w_144&v=1708681571653`}
+                alt={`${playerData.league[0].tier} Medal`}
+                className="inline-block ml-2 h-8 w-8"
+              />
+            )}
+          </p>
+          <p>Rank: {playerData.league[0].rank}</p>
+          <p>League Points: {playerData.league[0].leaguePoints}</p>
+          <p>Wins: {playerData.league[0].wins}</p>
+          <p>Losses: {playerData.league[0].losses}</p>
         </div>
       )}
     </div>
