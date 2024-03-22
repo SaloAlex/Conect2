@@ -18,7 +18,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "build")));
 
- const apiKey = "RGAPI-81881bf4-9928-433b-a9a3-dc8e0eef3b62";
+ const apiKey = "RGAPI-ac16c292-d2bb-45bd-8bef-6248f45782eb";
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
 app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
@@ -101,4 +101,3 @@ app.post("/send-email", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
