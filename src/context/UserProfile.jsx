@@ -1,42 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  FaMapMarkerAlt,
-  FaTwitter,
-  FaInstagram,
-  FaRocketchat,
-} from "react-icons/fa";
-import { SlUserFollow } from "react-icons/sl";
+import { FaMapMarkerAlt, FaTwitter, FaInstagram, FaUserGraduate } from "react-icons/fa";
 import Logo from "../assets/logo.png";
 import Riot from "../components/Riot";
 import UserAvatar from "../assets/avatar.jpg";
 import UserBanner from "../assets/banner.png";
 
 const UserProfile = () => {
-  const [isFollowClicked, setIsFollowClicked] = useState(false);
-  const [isChatClicked, setIsChatClicked] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // Agrega el estado isEditing
+  const [isEditing, setIsEditing] = useState(false);
   const [banner, setBanner] = useState(UserBanner);
   const [avatar, setAvatar] = useState(UserAvatar);
   const [name, setName] = useState("Nicholas Braylan");
-  const [header, setHeader] = useState(
-    "fitness fanatic, Rocket Leagues enthusiast, Keto diet lovers."
-  );
+  const [header, setHeader] = useState("fitness fanatic, Rocket Leagues enthusiast, Keto diet lovers.");
   const [editedBanner, setEditedBanner] = useState(banner);
   const [editedAvatar, setEditedAvatar] = useState(avatar);
   const [editedName, setEditedName] = useState(name);
   const [editedHeader, setEditedHeader] = useState(header);
-
-  const handleFollowClick = () => {
-    setIsFollowClicked(!isFollowClicked);
-  };
-
-  const handleChatClick = () => {
-    setIsChatClicked(!isChatClicked);
-  };
+  const [userState, setUserState] = useState("");
+  const [studyYear, setStudyYear] = useState("");
 
   const handleEditProfile = () => {
     setIsEditing(true);
+  };
+
+  const handleStateChange = (event) => {
+    setUserState(event.target.value);
+  };
+
+  const handleStudyYearChange = (event) => {
+    setStudyYear(event.target.value);
   };
 
   const handleSaveProfile = () => {
@@ -60,7 +51,6 @@ const UserProfile = () => {
         case "avatar":
           setEditedAvatar(imageDataUrl);
           break;
-        // Agrega casos adicionales según sea necesario
         default:
           break;
       }
@@ -77,30 +67,21 @@ const UserProfile = () => {
 
   return (
     <div className="bg-white max-w-screen-lg mx-auto p-4">
-      {/* Header */}
       <div className="header mb-4">
         {/* Logo */}
         <div className="flex items-center mb-4">
-          {/* ... (código del logo) */}
+          <img src={Logo} alt="Logo" className="h-12 mr-2" />
         </div>
 
         {/* Banner */}
         <div className="flex items-center mb-4">
-          <img
-            src={banner}
-            alt="User Banner"
-            className="w-full h-40 object-cover mb-4 rounded-md"
-          />
+          <img src={banner} alt="User Banner" className="w-full h-40 object-cover mb-4 rounded-md" />
         </div>
 
         {/* Avatar */}
         <div className="flex items-center mb-4">
           <div className="mx-auto">
-            <img
-              src={avatar}
-              alt="User Avatar"
-              className="rounded-full w-32 h-32 -mt-12 mx-auto mb-1"
-            />
+            <img src={avatar} alt="User Avatar" className="rounded-full w-32 h-32 -mt-12 mx-auto mb-1" />
           </div>
         </div>
 
@@ -121,8 +102,9 @@ const UserProfile = () => {
               rows=""
             />
           </div>
+          <h3 className="text-lg font-semibold mb-2">State and Study Year</h3>
           <div className="flex items-center justify-center text-gray-700">
-            <FaMapMarkerAlt className="mr-1" /> Buenos Aires, AR
+            <FaMapMarkerAlt className="mr-1" /> {userState} -  <FaUserGraduate className="mr-1" /> {studyYear}
             <a
               href="https://twitter.com/"
               target="_blank"
@@ -144,22 +126,6 @@ const UserProfile = () => {
 
         {/* Botones */}
         <div className="flex items-center justify-center mt-2">
-          {/* <button
-            onClick={handleFollowClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 relative"
-          >
-            <SlUserFollow
-              className={`mr-2 ${isFollowClicked ? "hidden" : ""}`}
-            />
-            {isFollowClicked ? "No yet" : ""}
-          </button>
-          <button
-            onClick={handleChatClick}
-            className="bg-green-500 text-white px-4 py-2 rounded-md relative"
-          >
-            <FaRocketchat className={`mr-2 ${isChatClicked ? "hidden" : ""}`} />
-            {isChatClicked ? "No yet" : ""}
-          </button> */}
           <button
             onClick={handleEditProfile}
             className="bg-blue-800 text-white px-4 py-2 rounded-md ml-2"
@@ -169,12 +135,8 @@ const UserProfile = () => {
         </div>
       </div>
 
-      {/* Body */}
       <div className="body col-span-2 row-span-2">
-        {/* Línea de separación */}
         <hr className="my-6 border-t border-gray-300 w-full" />
-
-        {/* Modal de edición de perfil */}
         {isEditing && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-4 rounded-md">
@@ -214,6 +176,23 @@ const UserProfile = () => {
                 onChange={(e) => setEditedHeader(e.target.value)}
                 className="w-full mb-4"
               />
+              <h3 className="text-lg font-semibold mb-2">State and Study Year</h3>
+              <p className="text-gray-700">
+                <select value={userState} onChange={handleStateChange}>
+                  <option value="">Seleccione un estado</option>
+                  <option value="Alabama">Alabama</option>
+                  <option value="Alaska">Alaska</option>
+                  <option value="Arizona">Arizona</option>
+                </select>
+                <br />
+                <select value={studyYear} onChange={handleStudyYearChange}>
+                  <option value="">Seleccione el año de estudio</option>
+                  <option value="Freshman">Freshman</option>
+                  <option value="Sophomore">Sophomore</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Senior">Senior</option>
+                </select>
+              </p>
               <div className="flex justify-end">
                 <button
                   onClick={handleSaveProfile}
@@ -231,27 +210,11 @@ const UserProfile = () => {
             </div>
           </div>
         )}
-
-        {/* Sección "About Me" y Componente Riot */}
         <div className="flex justify-between">
           <div className="w-1/2 pr-2">
-            <h3 className="text-lg font-semibold mb-2">About Me</h3>
-            <p className="text-gray-700">
-              I'm a fitness enthusiast, Rocket League lover, and Keto diet
-              follower. Welcome to my profile!
-            </p>
-          </div>
-
-          {/* Componente Riot */}
-          <div className="w-1/2 pl-2">
             <Riot />
           </div>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="footer col-span-2 row-span-1">
-        {/* Contenido del footer (si es necesario) */}
       </div>
     </div>
   );
