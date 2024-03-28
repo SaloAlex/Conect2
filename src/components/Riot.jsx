@@ -64,7 +64,7 @@ const Riot = () => {
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl mb-4 flex text-center">
-        Connect 
+        Riot Games
         <img
           src={LogoLol} // Reemplaza con la ruta correcta de tu imagen
           alt="Riot Logo"
