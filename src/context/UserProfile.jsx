@@ -254,7 +254,7 @@ const UserProfile = () => {
         </div>
       </div>
       {/* Cuerpo */}
-      <div className="row-span-1 bg-white max-w-screen-lg mx-auto p-4">
+      <div className="row-span-1 bg-white max-w-screen-lg mx-auto pt-2 px-4 pb-4">
         <div className="body grid grid-cols-2 gap-4">
           <div className="col-span-1">
             {/* Aquí incluimos el nuevo componente UserDataForm */}
