@@ -19,18 +19,15 @@ app.use(
 app.use(express.static(path.join(__dirname, "build")));
 
  const apiKey = "RGAPI-ac16c292-d2bb-45bd-8bef-6248f45782eb";
-
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
-app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
+app.get("/riot/account/v1/accounts/by-riot-id/:gameName/:tagLine", async (req, res) => {
   try {
     // Obtener parámetros de la URL
-    const { gameName, tagLine } = req.query;
+    const { gameName, tagLine } = req.params;
 
     // Hacer una solicitud real a la API de Riot Games con la clave de desarrollador
     const response = await axios.get(
-      `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
-        gameName
-      )}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
+      `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`
     );
 
     // Devolver la respuesta de la API de Riot Games
@@ -42,13 +39,11 @@ app.get("/riot/account/v1/accounts/by-riot-id", async (req, res) => {
 });
 
 // Ruta para manejar la solicitud de búsqueda de jugadores por summonerName
-app.get("/lol/summoner/v4/summoners/by-name", async (req, res) => {
+app.get("/lol/summoner/v4/summoners/by-name/:summonerName", async (req, res) => {
   try {
-    const { summonerName } = req.query;
+    const { summonerName } = req.params;
     const response = await axios.get(
-      `https://la2.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
-        summonerName
-      )}?api_key=${apiKey}`
+      `https://la2.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(summonerName)}?api_key=${apiKey}`
     );
     res.json(response.data);
   } catch (error) {
@@ -65,9 +60,7 @@ app.get("/lol/league/v4/entries/by-summoner/:encryptedSummonerId", async (req, r
 
     // Hacer una solicitud real a la API de Riot Games con la clave de desarrollador
     const response = await axios.get(
-      `https://la2.api.riotgames.com/lol/league/v4/entries/by-summoner/${encodeURIComponent(
-        encryptedSummonerId
-      )}?api_key=${apiKey}`
+      `https://la2.api.riotgames.com/lol/league/v4/entries/by-summoner/${encodeURIComponent(encryptedSummonerId)}?api_key=${apiKey}`
     );
 
 
@@ -78,7 +71,6 @@ app.get("/lol/league/v4/entries/by-summoner/:encryptedSummonerId", async (req, r
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 app.post("/send-email", async (req, res) => {
   try {
     const emailData = req.body;
