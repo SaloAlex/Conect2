@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: "*", // Permitir el acceso desde cualquier origen
+    origin: "https://master--conect2.netlify.app/user-profile", // Permitir el acceso desde cualquier origen
   })
 );
 
