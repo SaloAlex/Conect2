@@ -1,8 +1,6 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import LogoLol from "../assets/lol.png"
-
 
 const Riot = () => {
   const [gameName, setGameName] = useState("");
@@ -55,6 +53,7 @@ const Riot = () => {
     } finally {
       setLoading(false);
     }
+  };
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
