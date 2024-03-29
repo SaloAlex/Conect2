@@ -23,14 +23,18 @@ const Riot = () => {
     setLoading(true);
     setError(null);
     try {
-      const riotAccountResponse = await axios.get("/.netlify/functions/searchPlayer", {
-        params: { gameName, tagLine },
+      // Llama a la función 'searchPlayer' en la carpeta 'functions'
+      const riotAccountResponse = await axios.post("/.netlify/functions/searchPlayer", {
+        gameName,
+        tagLine,
       });
 
-      const summonerResponse = await axios.get("/.netlify/functions/getSummoner", {
-        params: { summonerName: gameName },
+      // Llama a la función 'getSummoner' en la carpeta 'functions'
+      const summonerResponse = await axios.post("/.netlify/functions/getSummoner", {
+        summonerName: gameName,
       });
 
+      // Llama a la función 'getLeague' en la carpeta 'functions' usando el ID obtenido del segundo endpoint
       const leagueResponse = await axios.get(`/.netlify/functions/getLeague/${summonerResponse.data.id}`);
 
       setPlayerData({
