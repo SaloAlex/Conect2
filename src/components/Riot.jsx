@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import LogoLol from "../assets/lol.png"
-
+import LogoLol from "../assets/lol.png";
 
 const baseURL = "https://master--conect2.netlify.app";
-
 
 const Riot = () => {
   const [gameName, setGameName] = useState("");
@@ -21,31 +19,20 @@ const Riot = () => {
     setTagLine(event.target.value);
   };
 
-  const handleSearch = async () => {
+  const searchPlayer = async () => {
     setLoading(true);
     setError(null);
     try {
-      // Endpoint 1: Buscar por gameName y tagLine
-      const riotAccountResponse = await axios.post(`${baseURL}/.netlify/functions/riotAccount`, {
-        gameName,
-        tagLine,
+      const riotAccountResponse = await axios.get("/.netlify/functions/searchPlayer", {
+        params: { gameName, tagLine },
       });
 
-      // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
-      const summonerResponse = await axios.post(`${baseURL}/.netlify/functions/lolSummoner`, {
-        summonerName: gameName,
+      const summonerResponse = await axios.get("/.netlify/functions/getSummoner", {
+        params: { summonerName: gameName },
       });
 
-      // Endpoint 3: Buscar por encryptedSummonerId (usando el summonerId del segundo endpoint)
-      const summonerIdResponse = await axios.post(`${baseURL}/.netlify/functions/lolSummonerId`, {
-        summonerName: gameName,
-      });
+      const leagueResponse = await axios.get(`/.netlify/functions/getLeague/${summonerResponse.data.id}`);
 
-      const leagueResponse = await axios.post(`${baseURL}/.netlify/functions/lolLeague`, {
-        summonerId: summonerIdResponse.data.id,
-      });
-
-      // Actualizar el estado con los datos de los tres endpoints
       setPlayerData({
         riotAccount: riotAccountResponse.data,
         summoner: summonerResponse.data,
@@ -59,17 +46,11 @@ const Riot = () => {
     }
   };
 
-
-
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl mb-4 flex text-center">
         Riot Games
-        <img
-          src={LogoLol} 
-          alt="Riot Logo"
-          className="ml-2 h-10 w-10" 
-        />
+        <img src={LogoLol} alt="Riot Logo" className="ml-2 h-10 w-10" />
       </h2>
 
       <div className="mb-4">
@@ -97,15 +78,14 @@ const Riot = () => {
         />
       </div>
       <button
-        onClick={handleSearch}
+        onClick={searchPlayer}
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
       >
-        {loading ? "Searching..." : "Connect" }
+        {loading ? "Searching..." : "Connect"}
       </button>
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {playerData && (
         <div className="mt-4">
-          {/* Utilizamos el profileIconId directamente desde la respuesta del segundo endpoint */}
           {playerData.summoner.profileIconId && (
             <img
               src={`https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon${playerData.summoner.profileIconId}.jpg?image=q_auto,f_webp,w_auto&v=1707283412529`}
@@ -118,7 +98,6 @@ const Riot = () => {
           <p>Name: {playerData.summoner.name}</p>
           <p>Summoner Level: {playerData.summoner.summonerLevel}</p>
 
-          {/* Información de la liga */}
           <h3 className="text-lg font-semibold">League:</h3>
           <p>Queue Type: {playerData.league[0].queueType}</p>
           <p>
