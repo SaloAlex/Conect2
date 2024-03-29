@@ -20,7 +20,7 @@ app.use(
 app.use(express.static(path.join(__dirname, "build")));
 
 const apiKey = "RGAPI-ac16c292-d2bb-45bd-8bef-6248f45782eb";
-const baseURL = "https://master--conect2.netlify.app/user-profile";
+const baseURL = "https://master--conect2.netlify.app";
 
 // Ruta para manejar la solicitud de búsqueda de jugadores de Riot Games por gameName y tagLine
 app.get("/riot/account/v1/accounts/by-riot-id/:gameName/:tagLine", async (req, res) => {
