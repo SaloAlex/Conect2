@@ -27,20 +27,20 @@ const Riot = () => {
     try {
       // Endpoint 1: Buscar por gameName y tagLine
       const riotAccountEndpoint =
-        "https://master--conect2.netlify.app/riot/account/v1/accounts/by-riot-id";
+        "https://master--conect2.netlify.app/:3001/riot/account/v1/accounts/by-riot-id";
       const riotAccountResponse = await axios.get(riotAccountEndpoint, {
         params: { gameName, tagLine },
       });
 
       // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
       const summonerEndpoint =
-        "https://master--conect2.netlify.app/lol/summoner/v4/summoners/by-name";
+        "https://master--conect2.netlify.app/:3001/lol/summoner/v4/summoners/by-name";
       const summonerResponse = await axios.get(summonerEndpoint, {
         params: { summonerName: gameName },
       });
 
       // Endpoint 3: Buscar por encryptedSummonerId (usando el summonerId del segundo endpoint)
-      const leagueEndpoint = `https://master--conect2.netlify.app/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
+      const leagueEndpoint = `https://master--conect2.netlify.app/:3001/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
       const leagueResponse = await axios.get(leagueEndpoint);
 
       // Actualizar el estado con los datos de los tres endpoints
@@ -59,6 +59,7 @@ const Riot = () => {
       setLoading(false);
     }
   };
+
 
 
   return (
