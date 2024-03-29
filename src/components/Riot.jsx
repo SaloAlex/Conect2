@@ -21,32 +21,22 @@ const Riot = () => {
     setLoading(true);
     setError(null);
     try {
-      // Endpoint 1: Buscar por gameName y tagLine
       const riotAccountEndpoint = `/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
       const riotAccountResponse = await axios.get(riotAccountEndpoint);
-      console.log("Riot Account Response:", riotAccountResponse.data);
-      
-      // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
+
       const summonerEndpoint = `/lol/summoner/v4/summoners/by-name/${encodeURIComponent(gameName)}`;
       const summonerResponse = await axios.get(summonerEndpoint);
-      console.log("Summoner Response:", summonerResponse.data);
-      
-      // Endpoint 3: Buscar por encryptedSummonerId (usando el summonerId del segundo endpoint)
+
       const leagueEndpoint = `/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
       const leagueResponse = await axios.get(leagueEndpoint);
-      console.log("League Response:", leagueResponse.data);
-      
-      // Actualizar el estado con los datos de los tres endpoints
+
       setPlayerData({
         riotAccount: riotAccountResponse.data,
         summoner: summonerResponse.data,
         league: leagueResponse.data,
       });
     } catch (error) {
-      console.error(
-        "Error searching player:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error searching player:", error);
       setError("Error searching player. Please try again.");
     } finally {
       setLoading(false);
