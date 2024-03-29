@@ -24,6 +24,10 @@ app.get("/riot/account/v1/accounts/by-riot-id/:gameName/:tagLine", async (req, r
   try {
     // Obtener parámetros de la URL
     const { gameName, tagLine } = req.params;
+    
+    // Agregar console.log para ver los parámetros recibidos
+    console.log("gameName:", gameName);
+    console.log("tagLine:", tagLine);
 
     // Hacer una solicitud real a la API de Riot Games con la clave de desarrollador
     const response = await axios.get(
@@ -42,6 +46,10 @@ app.get("/riot/account/v1/accounts/by-riot-id/:gameName/:tagLine", async (req, r
 app.get("/lol/summoner/v4/summoners/by-name/:summonerName", async (req, res) => {
   try {
     const { summonerName } = req.params;
+    
+    // Agregar console.log para ver el summonerName recibido
+    console.log("summonerName:", summonerName);
+
     const response = await axios.get(
       `https://la2.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(summonerName)}?api_key=${apiKey}`
     );
@@ -57,12 +65,13 @@ app.get("/lol/league/v4/entries/by-summoner/:encryptedSummonerId", async (req, r
   try {
     // Obtener el parámetro de la URL
     const { encryptedSummonerId } = req.params;
+    
+    // Agregar console.log para ver el encryptedSummonerId recibido
+    console.log("encryptedSummonerId:", encryptedSummonerId);
 
-    // Hacer una solicitud real a la API de Riot Games con la clave de desarrollador
     const response = await axios.get(
       `https://la2.api.riotgames.com/lol/league/v4/entries/by-summoner/${encodeURIComponent(encryptedSummonerId)}?api_key=${apiKey}`
     );
-
 
     // Devolver la respuesta de la API de Riot Games
     res.json(response.data);
@@ -71,6 +80,8 @@ app.get("/lol/league/v4/entries/by-summoner/:encryptedSummonerId", async (req, r
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
 app.post("/send-email", async (req, res) => {
   try {
     const emailData = req.body;
