@@ -25,22 +25,35 @@ const Riot = () => {
     setLoading(true);
     setError(null);
     try {
-      const riotAccountEndpoint = `${baseURL}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
-      const riotAccountResponse = await axios.get(riotAccountEndpoint);
+      // Endpoint 1: Buscar por gameName y tagLine
+      const riotAccountEndpoint =
+        "http://localhost:3001/riot/account/v1/accounts/by-riot-id";
+      const riotAccountResponse = await axios.get(riotAccountEndpoint, {
+        params: { gameName, tagLine },
+      });
 
-      const summonerEndpoint = `${baseURL}/lol/summoner/v4/summoners/by-name/${encodeURIComponent(gameName)}`;
-      const summonerResponse = await axios.get(summonerEndpoint);
+      // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
+      const summonerEndpoint =
+        "http://localhost:3001/lol/summoner/v4/summoners/by-name";
+      const summonerResponse = await axios.get(summonerEndpoint, {
+        params: { summonerName: gameName },
+      });
 
-      const leagueEndpoint = `${baseURL}/lol/league/v4/entries/by-summoner/${summonerResponse.data.accountId}`;
+      // Endpoint 3: Buscar por encryptedSummonerId (usando el summonerId del segundo endpoint)
+      const leagueEndpoint = `http://localhost:3001/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
       const leagueResponse = await axios.get(leagueEndpoint);
 
+      // Actualizar el estado con los datos de los tres endpoints
       setPlayerData({
         riotAccount: riotAccountResponse.data,
         summoner: summonerResponse.data,
         league: leagueResponse.data,
       });
     } catch (error) {
-      console.error("Error searching player:", error);
+      console.error(
+        "Error searching player:",
+        error.response ? error.response.data : error.message
+      );
       setError("Error searching player. Please try again.");
     } finally {
       setLoading(false);
