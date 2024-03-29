@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import LogoLol from "../assets/lol.png"
 
+
+const baseURL = "https://master--conect2.netlify.app";
+
+
 const Riot = () => {
   const [gameName, setGameName] = useState("");
   const [tagLine, setTagLine] = useState("");
@@ -21,13 +25,13 @@ const Riot = () => {
     setLoading(true);
     setError(null);
     try {
-      const riotAccountEndpoint = `/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
+      const riotAccountEndpoint = `${baseURL}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
       const riotAccountResponse = await axios.get(riotAccountEndpoint);
 
-      const summonerEndpoint = `/lol/summoner/v4/summoners/by-name/${encodeURIComponent(gameName)}`;
+      const summonerEndpoint = `${baseURL}/lol/summoner/v4/summoners/by-name/${encodeURIComponent(gameName)}`;
       const summonerResponse = await axios.get(summonerEndpoint);
 
-      const leagueEndpoint = `/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
+      const leagueEndpoint = `${baseURL}/lol/league/v4/entries/by-summoner/${summonerResponse.data.accountId}`;
       const leagueResponse = await axios.get(leagueEndpoint);
 
       setPlayerData({
