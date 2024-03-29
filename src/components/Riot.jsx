@@ -20,19 +20,21 @@ const Riot = () => {
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-
     try {
       // Endpoint 1: Buscar por gameName y tagLine
-      const riotAccountEndpoint = `master--conect2.netlify.app/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
+      const riotAccountEndpoint = `/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`;
       const riotAccountResponse = await axios.get(riotAccountEndpoint);
+      console.log("Riot Account Response:", riotAccountResponse.data);
       
       // Endpoint 2: Buscar por summonerName (usando el mismo gameName)
-      const summonerEndpoint = `master--conect2.netlify.app/lol/summoner/v4/summoners/by-name/${encodeURIComponent(gameName)}`;
+      const summonerEndpoint = `/lol/summoner/v4/summoners/by-name/${encodeURIComponent(gameName)}`;
       const summonerResponse = await axios.get(summonerEndpoint);
+      console.log("Summoner Response:", summonerResponse.data);
       
       // Endpoint 3: Buscar por encryptedSummonerId (usando el summonerId del segundo endpoint)
-      const leagueEndpoint = `master--conect2.netlify.app/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
+      const leagueEndpoint = `/lol/league/v4/entries/by-summoner/${summonerResponse.data.id}`;
       const leagueResponse = await axios.get(leagueEndpoint);
+      console.log("League Response:", leagueResponse.data);
       
       // Actualizar el estado con los datos de los tres endpoints
       setPlayerData({
@@ -49,17 +51,17 @@ const Riot = () => {
     } finally {
       setLoading(false);
     }
-    
   };
+
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl mb-4 flex text-center">
         Riot Games
         <img
-          src={LogoLol} // Reemplaza con la ruta correcta de tu imagen
+          src={LogoLol} 
           alt="Riot Logo"
-          className="ml-2 h-10 w-10" // Puedes ajustar las clases según tus necesidades
+          className="ml-2 h-10 w-10" 
         />
       </h2>
 
