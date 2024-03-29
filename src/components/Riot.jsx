@@ -3,7 +3,7 @@ import axios from "axios";
 import LogoLol from "../assets/lol.png"
 
 
-const baseURL = "https://master--conect2.netlify.app";
+const baseURL = "https://master--conect2.netlify.app/user-profile";
 
 
 const Riot = () => {
