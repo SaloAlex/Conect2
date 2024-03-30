@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import LogoLol from "../assets/lol.png";
 
-const baseURL = "https://master--conect2.netlify.app";
 
 const Riot = () => {
   const [gameName, setGameName] = useState("");
@@ -23,20 +22,20 @@ const Riot = () => {
     setLoading(true);
     setError(null);
     try {
-      // Llama a la función 'searchPlayer' en la carpeta 'functions'
-      const riotAccountResponse = await axios.post("/.netlify/functions/searchPlayer", {
+      // Llama a la función 'searchPlayer' a través de la redirección configurada en el archivo netlify.toml
+      const riotAccountResponse = await axios.post("/api/searchPlayer", {
         gameName,
         tagLine,
       });
-
-      // Llama a la función 'getSummoner' en la carpeta 'functions'
-      const summonerResponse = await axios.post("/.netlify/functions/getSummoner", {
+  
+      // Llama a la función 'getSummoner' a través de la redirección configurada en el archivo netlify.toml
+      const summonerResponse = await axios.post("/api/getSummoner", {
         summonerName: gameName,
       });
-
-      // Llama a la función 'getLeague' en la carpeta 'functions' usando el ID obtenido del segundo endpoint
-      const leagueResponse = await axios.get(`/.netlify/functions/getLeague/${summonerResponse.data.id}`);
-
+  
+      // Llama a la función 'getLeague' a través de la redirección configurada en el archivo netlify.toml
+      const leagueResponse = await axios.get(`/api/getLeague/${summonerResponse.data.id}`);
+  
       setPlayerData({
         riotAccount: riotAccountResponse.data,
         summoner: summonerResponse.data,
@@ -49,6 +48,7 @@ const Riot = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">

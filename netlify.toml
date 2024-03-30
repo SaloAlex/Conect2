@@ -1,9 +1,9 @@
 [[redirects]]
   from = "/api/*"
-  to = "https://conect2.netlify.app/:splat"
+  to = "/.netlify/functions/:splat"
   status = 200
   force = true
-  headers = { Access-Control-Allow-Origin = "https://conect2.netlify.app/user-profile" }
+  headers = { Access-Control-Allow-Origin = "https://conect2.netlify.app" }
 
 [[headers]]
   for = "/*"
