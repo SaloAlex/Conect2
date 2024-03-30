@@ -22,18 +22,15 @@ const Riot = () => {
     setLoading(true);
     setError(null);
     try {
-      // Llama a la función 'searchPlayer' a través de la redirección configurada en el archivo netlify.toml
       const riotAccountResponse = await axios.post("/api/searchPlayer", {
         gameName,
         tagLine,
       });
   
-      // Llama a la función 'getSummoner' a través de la redirección configurada en el archivo netlify.toml
       const summonerResponse = await axios.post("/api/getSummoner", {
         summonerName: gameName,
       });
   
-      // Llama a la función 'getLeague' a través de la redirección configurada en el archivo netlify.toml
       const leagueResponse = await axios.get(`/api/getLeague/${summonerResponse.data.id}`);
   
       setPlayerData({
@@ -48,6 +45,7 @@ const Riot = () => {
       setLoading(false);
     }
   };
+
   
 
   return (
